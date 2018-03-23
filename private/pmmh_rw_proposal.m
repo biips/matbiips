@@ -1,6 +1,4 @@
 function [prop_tr] = pmmh_rw_proposal(obj)
-
-%--------------------------------------------------------------------------
 % PMMH_RW_PROPOSAL samples from the proposal distribution
 % [prop_tr] = pmmh_rw_proposal(obj)
 %--------------------------------------------------------------------------

@@ -10,11 +10,19 @@ function [obj_pmmh, varargout] = biips_pmmh_update(obj_pmmh, n_iter, n_part, var
 %   Optional Inputs:
 %   - thin:         integer. Thinning interval. Returns output every 'thin' iterations
 %                   (default = 1)
+%   - max_fail:     integer. maximum number of failed SMC algorithms allowed.
+%                   (default=0).
 %   - rw_adapt:     logical. Activate adaptation of the proposal (default=true)
 %   - rs_thres, rs_type, ... : Additional arguments to be passed to the SMC
 %      algorithm. See BIIPS_SMC_SAMPLES for for details.
 %   - max_fail:    integer. maximum number of failed SMC algorithms allowed.
 %                  (default=0)
+%   - proposal:     proposal string. The type of proposal used by the SMC algorithm.
+%                   Possible values are 'auto' and 'prior'. 'auto' selects the
+%                   best sampler among available ones automatically. 'prior' forces
+%                   assignment of the prior sampler to every node. 'prior' switches off
+%                   lots of instructions and can speed up the startup of the SMC for large
+%                   models. (default = 'prior').
 %
 %   OUTPUT:
 %   - obj_pmmh:          structure. updated PMMH object
@@ -47,26 +55,16 @@ function [obj_pmmh, varargout] = biips_pmmh_update(obj_pmmh, n_iter, n_part, var
 
 % Biips Project - Bayesian Inference with interacting Particle Systems
 % Matbiips interface
-% Authors: Adrien Todeschini, Marc Fuentes, Fran�ois Caron
+% Authors: Adrien Todeschini, Marc Fuentes, François Caron
 % Copyright (C) Inria
 % License: GPL-3
 % Jan 2014; Last revision: 21-10-2014
 %--------------------------------------------------------------------------
 
 
-%% PROCESS AND CHECK INPUTS
-optarg_names = {'thin', 'max_fail', 'rw_adapt', 'rs_thres', 'rs_type'};
-optarg_default = {1, 0, true, .5, 'stratified'};
-optarg_valid = {[1, n_iter], [0, intmax], {true, false}, [0, n_part],...
-    {'multinomial', 'stratified', 'residual', 'systematic'}};
-optarg_type = {'numeric', 'numeric', 'logical', 'numeric', 'char'};
-[thin, max_fail, rw_adapt, rs_thres, rs_type] = parsevar(varargin, optarg_names,...
-    optarg_type, optarg_valid, optarg_default);
-
 %% Call pmmh_algo internal routine
 return_samples = false;
 
 varargout = cell(nargout-1,1);
 [obj_pmmh, varargout{:}] = pmmh_algo(obj_pmmh, n_iter, n_part,...
-    return_samples, 'thin', thin, 'max_fail', max_fail, 'rw_adapt', rw_adapt,...
-    'rs_thres', rs_thres, 'rs_type', rs_type);
+    return_samples, varargin{:});

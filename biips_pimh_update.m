@@ -6,6 +6,7 @@ function [obj_pimh, varargout] = biips_pimh_update(obj_pimh, n_iter, n_part, var
 %   - obj_pimh:     structure. PIMH object as returned by BIIPS_PIMH_INIT.
 %   - n_iter:       integer. Number of burn-in iterations.
 %   - n_part:       integer. Number of particles used in SMC algorithms.
+%
 %   Optional Inputs:
 %   - thin :        integer. Thinning interval. Returns samples every 'thin' iterations
 %                   (default = 1

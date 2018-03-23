@@ -1,6 +1,4 @@
 function ok = smc_forward_algo(id, n_part, rs_thres, rs_type, seed)
-
-%--------------------------------------------------------------------------
 % SMC_FORWARD_algo runs a SMC algorithm
 % ok = smc_forward_algo(id, nb_part, rs_thres, rs_type, seed)
 %   INPUT 
@@ -18,7 +16,7 @@ function ok = smc_forward_algo(id, n_part, rs_thres, rs_type, seed)
 
 % Biips Project - Bayesian Inference with interacting Particle Systems
 % Matbiips interface
-% Authors: Adrien Todeschini, Marc Fuentes, Fran�ois Caron
+% Authors: Adrien Todeschini, Marc Fuentes, François Caron
 % Copyright (C) Inria
 % License: GPL-3
 % Jan 2014; Last revision: 18-03-2014

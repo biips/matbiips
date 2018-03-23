@@ -1,8 +1,7 @@
 function check_struct(obj, class)
+%CHECK_STRUCT Checks if the structure is a valid object of class class
+%--------------------------------------------------------------------------
 
-%
-% Checks if the structure is a valid object of class class
-%
 
 %% check arguments
 if ~isstruct(obj)

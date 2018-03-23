@@ -1,6 +1,4 @@
 function s= cell2struct_weaknames(fields, weak_names)
-
-%--------------------------------------------------------------------------
 % CELL2STRUCT_WEAKNAMES builds a structure with "illegal" names
 % of the form "x[1:5]"
 % s= cell2struct_weaknames(fields, weak_names) 

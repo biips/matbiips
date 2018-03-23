@@ -1,5 +1,4 @@
 function [s] = kde(samples, weights, bw, n)
-%--------------------------------------------------------------------------
 % KDE kernel density estimation with gaussian kernels
 % [s] = kde(samples, weights, bw, n)
 %   INPUT

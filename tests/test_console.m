@@ -1,9 +1,12 @@
-clear
+clear variables
 close all
+
+addpath ..
+biips_clear
 
 N=100;
 ids=zeros(N,1);
-for i=1:N;
+for i=1:N
   ids(i)=matbiips('make_console');
 end
 p=randperm(N);

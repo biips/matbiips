@@ -101,11 +101,11 @@ legend('true', 'SMC filtering estimate', 'SMC smoothing estimate')
 legend boxoff
 
 subplot(2,2,2,'YTick',zeros(1,0)); hold on
-bar(1:data.tmax, 2+.5*(model.data.c_true==1), 'g', 'barwidth', 1, 'basevalue', 2, 'edgecolor', 'none')
+stairs(1:data.tmax, 2+.5*(model.data.c_true==1), 'g');
 text(2, 2.75, 'true')
-bar(2:data.tmax, 1+.5*(summ_smc_c.f.mode==1), 'b', 'barwidth', 1, 'basevalue', 1, 'edgecolor', 'none')
+stairs(2:data.tmax, 1+.5*(summ_smc_c.f.mode==1), 'b');
 text(2, 1.75, 'SMC filtering mode')
-bar(2:data.tmax, .5*(summ_smc_c.s.mode==1), 'r', 'barwidth', 1, 'basevalue', 0, 'edgecolor', 'none')
+stairs(2:data.tmax, .5*(summ_smc_c.s.mode==1), 'r');
 text(2, .75, 'SMC smoothing mode')
 xlim([1,data.tmax+1])
 ylim([0,3])
@@ -114,9 +114,9 @@ ylabel('c[t]==1')
 
 t = 5;
 subplot(2,2,3); hold on
-plot(model.data.x_true(t), 0, 'g^', 'markerfacecolor', 'g')
 plot(dens_smc_x.f(t).x, dens_smc_x.f(t).f, 'b')
 plot(dens_smc_x.s(t).x, dens_smc_x.s(t).f, 'r')
+plot([model.data.x_true(t) model.data.x_true(t)], ylim, 'g')
 xlabel(sprintf('x[%d]', t))
 ylabel('posterior density')
 
@@ -153,12 +153,12 @@ figure
 subplot(2,1,1); hold on
 plot([lml_pimh_burn, lml_pimh])
 xlabel('PIMH iteration')
-ylabel('log marginal likelihood')
+ylabel('log p(y)')
 
 t = 5;
 subplot(2,1,2); hold on
-plot(0, model.data.x_true(t), 'g>', 'markerfacecolor', 'g')
 plot(out_pimh.x(t,:))
+plot(xlim, [model.data.x_true(t) model.data.x_true(t)], 'g')
 xlabel('PIMH iteration')
 ylabel(sprintf('x[%d]', t))
 
@@ -173,9 +173,9 @@ legend('true', 'PIMH estimate')
 legend boxoff
 
 subplot(2,2,2,'YTick',zeros(1,0)); hold on
-bar(1:data.tmax, 1+.5*(model.data.c_true==1), 'g', 'barwidth', 1, 'basevalue', 1, 'edgecolor', 'none')
+stairs(1:data.tmax, 1+.5*(model.data.c_true==1), 'g');
 text(2, 1.75, 'true')
-bar(2:data.tmax, .5*(summ_pimh_c.mode==1), 'b', 'barwidth', 1, 'basevalue', 0, 'edgecolor', 'none')
+stairs(2:data.tmax, .5*(summ_pimh_c.mode==1), 'b');
 text(2, .75, 'PIMH mode')
 xlim([1,data.tmax+1])
 ylim([0,2])
@@ -183,8 +183,8 @@ xlabel('t')
 ylabel('c[t]==1')
 
 subplot(2,2,3); hold on
-plot(model.data.x_true(t), 0, 'g^', 'markerfacecolor', 'g')
 plot(dens_pimh_x(t).x, dens_pimh_x(t).f, 'b')
+plot([model.data.x_true(t) model.data.x_true(t)], ylim, 'g')
 xlabel(sprintf('x[%d]', t))
 ylabel('posterior density')
 
@@ -209,16 +209,16 @@ figure
 subplot(2,1,1); hold on
 title('SMC sensitivity')
 plot(logtau_val, out_sens.log_marg_like)
-plot(data.logtau, min(out_sens.log_marg_like), 'g^', 'markerfacecolor', 'g')
+plot([data.logtau data.logtau], ylim, 'g')
 xlabel('logtau')
-ylabel('log p(y|logtau)')
+ylabel('log p(y | logtau)')
 
 subplot(2,1,2); hold on
 plot(logtau_val, out_sens.log_marg_like_pen)
-yl = ylim;
-plot(data.logtau, yl(1), 'g^', 'markerfacecolor', 'g')
+plot([data.logtau data.logtau], ylim, 'g')
 xlabel('logtau')
-ylabel('log p(y|logtau) + log p(logtau)')
+ylabel('log p(y, logtau)')
+xlim([logtau_val(1), logtau_val(end)])
 
 %% PMMH algorithm
 modelfile = 'hmm.bug';
@@ -228,9 +228,11 @@ data = struct('tmax', 10, 'p', [.5; .5], 'logtau_true', log(1));
 model = biips_model(modelfile, data);
 
 n_part = 50;
-obj_pmmh = biips_pmmh_init(model, {'logtau'}, 'latent_names', {'x', 'c[2:10]'}, 'inits', {-2}); % Initialize
-[obj_pmmh, plml_pmmh_burn] = biips_pmmh_update(obj_pmmh, 100, n_part); % Burn-in
-[obj_pmmh, out_pmmh, plml_pmmh] = biips_pmmh_samples(obj_pmmh, 100, n_part, 'thin', 1); % Samples
+n_burn = 1000;
+n_iter = 1000;
+obj_pmmh = biips_pmmh_init(model, {'logtau'}, 'latent_names', {'x', 'c[2:10]'}, 'inits', {-1}); % Initialize
+[obj_pmmh, plml_pmmh_burn] = biips_pmmh_update(obj_pmmh, n_burn, n_part); % Burn-in
+[obj_pmmh, out_pmmh, plml_pmmh] = biips_pmmh_samples(obj_pmmh, n_iter, n_part, 'thin', 1); % Samples
 
 out_pmmh
 summ_pmmh = biips_summary(out_pmmh)
@@ -249,17 +251,19 @@ figure
 subplot(2,2,1); hold on
 plot([plml_pmmh_burn, plml_pmmh])
 xlabel('PMMH iteration')
-ylabel('log p(y|logtau) + log p(logtau)')
+ylabel('log p(y, logtau)')
+xlim([1 n_burn+n_iter])
 
 subplot(2,2,2); hold on
-plot(0, model.data.logtau_true, 'g>', 'markerfacecolor', 'g')
-plot(out_pmmh.logtau)
+plot(n_burn+(1:n_iter), out_pmmh.logtau)
+plot(xlim, [model.data.logtau_true model.data.logtau_true], 'g')
 xlabel('PMMH iteration')
 ylabel('logtau')
+xlim(n_burn+[1 n_iter])
 
 subplot(2,2,3); hold on
-plot(model.data.logtau_true, 0, '^g', 'markerfacecolor', 'g')
 plot(dens_pmmh_lt.x, dens_pmmh_lt.f, 'b')
+plot([model.data.logtau_true model.data.logtau_true], ylim, 'g')
 xlabel('logtau')
 ylabel('posterior density')
 
@@ -280,9 +284,9 @@ legend('true', 'PMMH estimate')
 legend boxoff
 
 subplot(2,2,2,'YTick',zeros(1,0)); hold on
-bar(1:data.tmax, 1+.5*(model.data.c_true==1), 'g', 'barwidth', 1, 'basevalue', 1, 'edgecolor', 'none')
+stairs(1:data.tmax, 1+.5*(model.data.c_true==1), 'g')
 text(2, 1.75, 'true')
-bar(2:data.tmax, .5*(summ_pmmh_c.mode==1), 'b', 'barwidth', 1, 'basevalue', 0, 'edgecolor', 'none')
+stairs(2:data.tmax, .5*(summ_pmmh_c.mode==1), 'b')
 text(2, .75, 'PMMH mode')
 xlim([1,data.tmax+1])
 ylim([0,2])
@@ -291,8 +295,8 @@ ylabel('c[t]==1')
 
 t = 5;
 subplot(2,2,3); hold on
-plot(model.data.x_true(t), 0, 'g^', 'markerfacecolor', 'g')
 plot(dens_pmmh_x(t).x, dens_pmmh_x(t).f, 'b')
+plot([model.data.x_true(t) model.data.x_true(t)], ylim, 'g')
 xlabel(sprintf('x[%d]', t))
 ylabel('posterior density')
 

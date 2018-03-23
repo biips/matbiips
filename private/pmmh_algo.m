@@ -1,6 +1,4 @@
 function [obj, varargout] = pmmh_algo(obj, n_iter, n_part, return_samples, varargin)
-
-%
 % PMMH_ALGO performs iterations for the PMMH algorithm
 %
 %   It is recommended to use the two wrapper functions below instead:
@@ -10,21 +8,21 @@ function [obj, varargout] = pmmh_algo(obj, n_iter, n_part, return_samples, varar
 
 % Biips Project - Bayesian Inference with interacting Particle Systems
 % Matbiips interface
-% Authors: Adrien Todeschini, Marc Fuentes, Fran�ois Caron
+% Authors: Adrien Todeschini, Marc Fuentes, François Caron
 % Copyright (C) Inria
 % License: GPL-3
-% Jan 2014; Last revision: 18-03-2014
+% Jan 2014; Last revision: 17-05-2017
 %--------------------------------------------------------------------------
-
 
 %% PROCESS AND CHECK INPUTS
 optarg_names = {'thin', 'max_fail', 'rw_adapt',...
-    'rs_thres', 'rs_type'};
-optarg_default = {1, 0, false, .5, 'stratified'};
+    'rs_thres', 'rs_type', 'proposal'};
+optarg_default = {1, 0, false, .5, 'stratified', 'prior'};
 optarg_valid = {[1, n_iter], [0, intmax], {true, false},...
-    [0, n_part], {'stratified', 'systematic', 'residual', 'multinomial'}};
-optarg_type = {'numeric', 'numeric', 'logical', 'numeric', 'char'};
-[thin, max_fail, rw_adapt, rs_thres, rs_type] = parsevar(varargin, optarg_names,...
+    [0, n_part], {'stratified', 'systematic', 'residual', 'multinomial'},...
+    {'auto', 'prior'}};
+optarg_type = {'numeric', 'numeric', 'logical', 'numeric', 'char', 'char'};
+[thin, max_fail, rw_adapt, rs_thres, rs_type, proposal] = parsevar(varargin, optarg_names,...
     optarg_type, optarg_valid, optarg_default);
 
 check_struct(obj, 'pmmh');
@@ -49,7 +47,7 @@ end
 
 % build smc sampler
 if (~matbiips('is_sampler_built', console))
-    matbiips('build_smc_sampler', console, false);
+    matbiips('build_smc_sampler', console, strcmp(proposal, 'prior'));
 end
 
 % toggle rescaling adaptation

@@ -15,10 +15,10 @@ data
 
 model
 {
-  log_prec_y[1] ~ dunif(-3, 3)
-  log_prec_y[2] ~ dnorm(0, .1)
-  log_prec_y2[1:2] ~ dmnorm(mean0, prec0)  
-  alpha ~ dnorm(0,1)
+  log_prec_y[1:2] ~ dmnorm(mean0, prec0)  
+  log_prec_y2[1] ~ dunif(-3, 3)
+  log_prec_y2[2] ~ dnorm(0, .1)
+  alpha ~ dnorm(0, .1)
 
   prec_y <- exp(log_prec_y[1])
   x[1] ~ dnorm(mean_x_init, prec_x_init)

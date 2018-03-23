@@ -1,8 +1,5 @@
 function [obj, accept_rate, n_fail] = pmmh_one_update(obj, pn_param,...
     n_part, rs_thres, rs_type, rw_rescale, rw_learn)
-
-
-%--------------------------------------------------------------------------
 % PMMH_ONE_UPDATE performs one step of the PMMH algorithm
 % [obj, accept_rate, n_fail] = pmmh_one_update(obj, ...
 %     pn_param, n_part, rs_thres, rs_type, rw_rescale, rw_learn)

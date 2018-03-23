@@ -1,5 +1,5 @@
 function seed = get_seed()
-
+%GET_SEED return a random seed for RNG
 seed = double(randi(intmax));
 
 % if isoctave() || verLessThan('matlab', '7.12')

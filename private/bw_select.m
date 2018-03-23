@@ -22,6 +22,9 @@ function [ bw ] = bw_select( samples, weights, type )
 % Jan 2014; Last revision: 18-03-2014
 %--------------------------------------------------------------------------
 
+if nargin<3
+    type = 'nrd0';
+end
 
 if numel(samples) < 2
     error('need at least 2 data points')

@@ -1,5 +1,5 @@
 function ok = is_monitored(p, variable_names, type, check_released)
-
+%IS_MONITORED check if a variable is monitored
 pn = cellfun(@(x) parse_varname(x), variable_names);
 names = {pn.name};
 lower = {pn.lower};

@@ -1,5 +1,5 @@
 function sample_param = pmmh_set_param(console, param_names, pn_param, values)
-
+%PMMH_SET_PARAM Either set or sample initial parmeter value for PMMH
 n_param = numel(pn_param);
 sample_param = cell(n_param, 1);
 
@@ -13,7 +13,7 @@ if ~isempty(values)
         ok = matbiips('change_data', console, pn_param(i).name, ...
             pn_param(i).lower, pn_param(i).upper, values{i}, true);
         if ~ok
-            error('Data change failed: invalid initial value: %s = %g', param_names{i}, values{i});
+            error('Data change failed: invalid initial value: %s = [%s]', param_names{i}, sprintf('%g ', values{i}));
         end
         sample_param{i} = values{i};
     end

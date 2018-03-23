@@ -7,6 +7,7 @@ function [obj_pimh, samples_pimh, varargout] = biips_pimh_samples(obj_pimh, n_it
 %   - obj_pimh:     structure. PIMH object as returned by BIIPS_PIMH_INIT
 %   - n_iter:       integer. Number of iterations
 %   - n_part:       integer. Number of particles used in SMC algorithms
+%
 %   Optional Inputs:
 %   - thin :        integer. Thinning interval. Returns samples every 'thin' iterations
 %                   (default = 1)

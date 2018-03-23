@@ -46,7 +46,7 @@ if ~all(isnum)
     v = fieldnames(data);
     ignored = v(~isnum);
     data = rmfield(data, ignored);
-    warning('Ignored non numericvariables in data: %s ', sprintf('%s ', ignored{:}));
+    warning('Ignored non numeric variables in data: %s ', sprintf('%s ', ignored{:}));
 end
 
 

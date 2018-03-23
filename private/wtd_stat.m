@@ -1,6 +1,4 @@
 function stat = wtd_stat(values, weights, probs, order, mode)
-
-%--------------------------------------------------------------------------
 % WTD_STAT computes univariate statistics on weighted samples
 % summ = wtd_stat(values, weights, probs, order, mode)
 %

@@ -1,5 +1,10 @@
-% test_crash5
+% [CRASHES ON WINDOWS] test_crash5
+clear variables
 close all
+
+addpath ..
+biips_clear
+
 
 % % THIS IS OK
 % t_max = 10; mean_x_init = 0;prec_x_init = 1;prec_x = 1;prec_y = 10;

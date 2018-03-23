@@ -1,6 +1,4 @@
 function varargout = parsevar(opt_param, param_names, param_type, param_valid, param_default)
-
-%--------------------------------------------------------------------------
 % PARSEVAR parses the set of optional parameters and returns their values
 % parsevar(opt_param, param_names, param_list)
 %

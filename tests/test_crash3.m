@@ -1,9 +1,12 @@
-% test_crash3
+% [CRASHES ON WINDOWS] test_crash3
 % PB: Lorsque l'on veut monitorer x[1:2,1], le programme crashe a la fin du
 % SMC sans message d'erreur
-
-clear
+clear variables
 close all
+
+addpath ..
+biips_clear
+
 
 %%% Model parameters
 t_max = 100;

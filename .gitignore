@@ -2,3 +2,10 @@
 .Rhistory
 .RData
 .Ruserdata
+*.Rproj
+*.mex*
+*.o
+*.obj
+*~
+*.asv
+octave-workspace

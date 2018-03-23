@@ -1,6 +1,4 @@
 function obj = pmmh_rw_rescale(obj, ar)
-
-%--------------------------------------------------------------------------
 % PMMH_RW_RESCALE rescale the randow walk variance
 % obj = pmmh_rw_rescale(obj, ar)
 %--------------------------------------------------------------------------

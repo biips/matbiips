@@ -1,6 +1,4 @@
 function [out] = pmmh_rw_transform(sample_param, obj, funtype)
-
-%--------------------------------------------------------------------------
 % PMMH_RW_TRANSFORM Applies transformation functions to samples
 % [sample_tr_vec] = pmmh_rw_transform(sample_param, obj) % direct transformation
 % [sample_vec] = pmmh_rw_transform(sample_param_tr, obj, 'inv') % inverse transformation

@@ -1,8 +1,11 @@
 % [SOLVED] test_crash2
 % PB: Pb avec les dimensions de y
-
-clear
+clear variables
 close all
+
+addpath ..
+biips_clear
+
 
 %%% Model parameters
 t_max = 100;

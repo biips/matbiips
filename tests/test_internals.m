@@ -1,5 +1,9 @@
-clear
+clear -variables
 close all
+
+addpath ..
+biips_clear
+
 %data
 t_max=4;
 prec_x=1;
@@ -7,12 +11,83 @@ prec_x_init=1;
 mean_x_init=0;
 prec_y=10;
 data=struct('t_max', t_max, 'prec_x_init', prec_x_init, 'prec_x', prec_x,  'prec_y', prec_y, 'mean_x_init', mean_x_init);
+if (~matbiips('load_module', 'basemod'))
+    error('problem loading module'); 
+end
+% console init
+id=matbiips('make_console'); 
+matbiips('verbosity',2);
 
-model = biips_model('hmm_1d_lin.bug', data);
-out_smc = biips_smc_samples(model, {'x[1:2]'}, 100);
+%% Test console
+N=10;
+ids=zeros(N,1);
+for i=1:N
+    ids(i)=matbiips('make_console');
+end
+p=randperm(N);
+for i=1:N
+    matbiips('clear_console',ids(p(i)));
+end
+
+%% verif et compil du modele
+matbiips('check_model', id, 'hmm_1d_lin.bug'); 
+matbiips('compile_model', id, data, true, 12, false);
+matbiips('set_default_monitors',id);
+matbiips('set_filter_monitors', id, {'x'} , {1 }, { t_max });
+matbiips('set_gen_tree_smooth_monitors', id, {'x'}, {1}, {t_max});
+matbiips('set_backward_smooth_monitors', id, {'x'}, {1}, {t_max });
+if (~matbiips('is_sampler_built',id))
+  matbiips('build_smc_sampler',id, false);
+  sort_nodes=matbiips('get_sorted_nodes', id)
+  node_samplers=matbiips('get_nodes_samplers', id)
+end
+
+
+if (~matbiips('run_smc_sampler', id, 100, 9, 0.5, 'stratified'))
+   error('smc sampler failed!');
+end  
+log_norm=matbiips('get_log_norm_const', id)
+filter_monitors=matbiips('get_filter_monitors',id);
+if isoctave()
+    getfield(filter_monitors, 'x[1:4]').conditionals{:}
+else
+    filter_monitors.('x[1:4]').conditionals{:}
+end
+smooth_monitors=matbiips('get_gen_tree_smooth_monitors',id);
+if isoctave()
+    getfield(smooth_monitors, 'x[1:4]').conditionals{:}
+else
+    smooth_monitors.('x[1:4]').conditionals{:}
+end
+sample_value = matbiips('sample_gen_tree_smooth_particle', id, 42);
+matbiips('clear_gen_tree_smooth_monitors',id, false);
+% on fait un backward
+if (~matbiips('is_smc_sampler_at_end', id))
+   error('sampler not finish!');
+end   
+matbiips('run_backward_smoother', id);
+matbiips('clear_filter_monitors', id, false);
+backward_smooth_monitors=matbiips('get_backward_smooth_monitors',id);
+if isoctave()
+    getfield(backward_smooth_monitors, 'x[1:4]').conditionals{:}
+else
+    backward_smooth_monitors.('x[1:4]').conditionals{:}
+end
+matbiips('clear_backward_smooth_monitors', id, false);
+
+
 % test change data
-change_ok = matbiips('change_data', model.id, 'x', [3] , [3] , 0.5, true)
+change_ok = matbiips('change_data', id, 'x', [3] , [3] , 0.5, true)
 %
-sample = matbiips('sample_data', model.id, 'x', [1] , [1] , rand(1))
+sample = matbiips('sample_data', id, 'x', [1] , [1] , rand(1))
 % console cleaning 
-matbiips('clear_console', model.id); 
+matbiips('clear_console', id); 
+
+
+matbiips('message', 'HHHAHAHHHA');
+pb1=matbiips('make_progress_bar', 100, '*', 'zut');
+for i=1:100
+   matbiips('advance_progress_bar', pb1, 1);
+end
+matbiips('clear_progress_bar', pb1);
+

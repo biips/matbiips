@@ -1,8 +1,8 @@
 % Matbiips: Matlab interface to Biips
 %
 % Files
-%   biips_add_function     - Add a user-defined function to the BUGS language.
-%   biips_add_distribution - Add a user-defined distribution to the BUGS language.
+%   biips_add_function     - Add a custom function to the BUGS language.
+%   biips_add_distribution - Add a custom distribution to the BUGS language.
 %   biips_model            - Create a Biips model described in BUGS language.
 %   biips_clear            - Clear allocated Biips consoles.
 %   biips_nodes            - Table of nodes of the Biips model.
@@ -22,3 +22,7 @@
 %   isoctave               - Check if octave is running.
 %   biips_diagnosis        - Diagnosis of the SMC algorithm.
 %   biips_table            - Univariate frequency tables or probability mass estimates of discrete variables.
+%   biips_mex              - Build matbiips mex library
+
+
+

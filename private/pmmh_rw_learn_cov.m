@@ -1,6 +1,4 @@
 function obj = pmmh_rw_learn_cov(obj)
-
-%--------------------------------------------------------------------------
 % PMMH_RW_LEARN_COV updates the empirical covariance of the samples
 % obj = pmmh_rw_learn_cov(obj)
 %--------------------------------------------------------------------------

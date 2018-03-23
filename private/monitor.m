@@ -1,4 +1,5 @@
 function monitor(console, varnames, type)
+%MONITOR setup monitoring of a variable
   
 pn = cellfun(@(x) parse_varname(x), varnames); 
 names = {pn.name};

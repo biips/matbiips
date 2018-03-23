@@ -6,7 +6,7 @@ function biips_build_sampler(model, varargin)
 %   Optional Input:
 %   - proposal: string. The type of proposal used by the SMC algorithm.
 %               Possible values are 'auto' and 'prior'. 'auto' selects the best sampler
-%               among available ones automatically. 'prior' forces asignment of the prior
+%               among available ones automatically. 'prior' forces assignment of the prior
 %               sampler to every node. 'prior' switches off lots of instructions and can
 %               speed up the startup of the SMC for large models.
 %               (default = 'auto')
@@ -57,8 +57,4 @@ optarg_type = {'char'};
 check_struct(model, 'biips');
 
 %% Build sampler
-prior=false;
-if (strcmp(proposal, 'prior'))
-    prior = true;
-end
-matbiips('build_smc_sampler', model.id, prior);
+matbiips('build_smc_sampler', model.id, strcmp(proposal, 'prior'));

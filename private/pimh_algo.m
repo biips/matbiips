@@ -11,15 +11,15 @@ function [obj, varargout] = pimh_algo(obj, n_iter, n_part, return_samples, varar
 %   - n_part:       positive integer. Number of particles used in SMC algorithms
 %   - return_samples: logical. 
 %   Optional Inputs:
-%   - thin :        positive integer. Returns samples every thin iterations
+%   - thin:         positive integer. Returns samples every thin iterations
 %                   (default=1)
-%   - rs_thres :    positive real (default = 0.5).
+%   - rs_thres:     positive real (default = 0.5).
 %                   Threshold for the resampling step (adaptive SMC).
 %                   if rs_thres is in [0,1] --> resampling occurs when
 %                                           (ESS > rs_thres * nb_part)
 %                   if rs_thres is in [2,nb_part] --> resampling occurs when
 %                                               (ESS > rs_thres)
-%   - rs_type :     string (default = 'stratified')
+%   - rs_type:      string (default = 'stratified')
 %                   Possible values are 'stratified', 'systematic', 'residual', 'multinomial'
 %                   Indicates the type of algorithm used for the resampling step.
 %
@@ -44,7 +44,7 @@ function [obj, varargout] = pimh_algo(obj, n_iter, n_part, return_samples, varar
 
 % Biips Project - Bayesian Inference with interacting Particle Systems
 % Matbiips interface
-% Authors: Adrien Todeschini, Marc Fuentes, Fran�ois Caron
+% Authors: Adrien Todeschini, Marc Fuentes, François Caron
 % Copyright (C) Inria
 % License: GPL-3
 % Jan 2014; Last revision: 18-03-2014
@@ -74,9 +74,9 @@ variable_names = obj.variable_names;
 monitor(console, variable_names, 's');
 
 % build smc sampler
-if (~matbiips('is_sampler_built', console))
-    matbiips('build_smc_sampler', console, false);
-end
+% if (~matbiips('is_sampler_built', console))
+%     matbiips('build_smc_sampler', console, false);
+% end
 
 % Get sample and log likelihood from PIMH object
 sample = obj.sample;

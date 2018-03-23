@@ -1,6 +1,4 @@
 function clear_monitors(console, type, release_only)
-
-%--------------------------------------------------------------------------
 % CLEAR_MONITORS clears some monitors  
 % clear_monitors(console, type, [release_only])
 %   INPUT

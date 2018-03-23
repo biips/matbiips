@@ -1,26 +1,29 @@
-clear
+clear -variables
 close all
 
-%% define data
-t_max = 20; 
-mean_x_init = 0;
-prec_x_init = 0.5;
-prec_x = 10;
-prec_y = 1;
+addpath ..
+biips_clear
 
-%% build evalutations functions
+% define data
+data.t_max = 20; 
+data.mean_x_init = 0;
+data.prec_x_init = 0.5;
+data.prec_x = 10;
+data.prec_y = 1;
+
+% build evalutations functions
 biips_add_distribution('distmat', 3, 'mydistdim', 'mydistsample')
 
-%% create model
-model = biips_model('hmm_1d_nonlin_distmat.bug', who);
+% create model
+model = biips_model('hmm_1d_nonlin_distmat.bug', data);
 data = model.data;
 x_true = data.x_true;
 
-%% run SMC
+% run SMC
 n_part = 100;
 out_smc = biips_smc_samples(model, {'x'}, n_part, 'type', 'fs');
 
-%% filtering stats
+% filtering stats
 x_summ = biips_summary(out_smc, 'type', 'fs');
 
 % figure

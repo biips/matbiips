@@ -13,13 +13,13 @@
 # MEX_OUTPUT_OPT
 # MEXEXT_COMMAND
 # MATLAB_ARCH			equals to "i386" or "x64"
-# MATLAB_LIBRARY_DIR 	
-# MATLAB_INCLUDE_DIR 	
-# MATLAB_COMPILE_FLAGS 	
-# MATLAB_LIBRARIES		
-# MATLAB_MEX_LIBRARY	
-# MATLAB_MX_LIBRARY		
-# MATLAB_MAT_LIBRARY	
+# MATLAB_LIBRARY_DIR
+# MATLAB_INCLUDE_DIR
+# MATLAB_COMPILE_FLAGS
+# MATLAB_LIBRARIES
+# MATLAB_MEX_LIBRARY
+# MATLAB_MX_LIBRARY
+# MATLAB_MAT_LIBRARY
 
 # Variables that can be set by the user:
 # MATLAB_ROOT		path to the root of MATLAB install. Helps finding MATLAB.
@@ -66,7 +66,7 @@ if (MATLAB)
     # find mex program
     find_program(MEX_COMMAND
         NAMES mex mex.bat
-        PATHS ${MATLAB_BINDIR} 
+        PATHS ${MATLAB_BINDIR}
         NO_DEFAULT_PATH
     )
     set(MEX_FLAGS_Release -O)
@@ -83,7 +83,7 @@ if (MATLAB)
     # find mexext program
     find_program(MEXEXT_COMMAND
         NAMES mexext mexext.bat
-        PATHS ${MATLAB_BINDIR} 
+        PATHS ${MATLAB_BINDIR}
         NO_DEFAULT_PATH
     )
     if (MEXEXT_COMMAND)
@@ -107,7 +107,11 @@ if (MATLAB)
     endif(MEXEXT_COMMAND)
 
     # define object file extension
-    set(MEX_OBJ_EXT obj)
+    if (UNIX)
+      set(MEX_OBJ_EXT o)
+    elseif(WIN32)
+      set(MEX_OBJ_EXT obj)
+    endif()
 
     # We define compile flags and find MATLAB libraries to link with
     # for manual compilations not using mex program.
@@ -147,7 +151,7 @@ if (MATLAB)
                 file(TO_CMAKE_PATH "${MATLAB_BINDIR}/glnxa64" MATLAB_LIBRARY_DIR)
                 set(MATLAB_COMPILE_FLAGS "${MATLAB_COMPILE_FLAGS} -m64")
                 set(MATLAB_LINK_FLAGS "${MATLAB_LINK_FLAGS} -m64")
-            endif()    
+            endif()
         endif(WIN32)
     endif(MATLAB_LIBRARYDIR)
 

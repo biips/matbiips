@@ -22,52 +22,12 @@ if (UNIX) # Linux or MacOSX
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
 elseif (WIN32) # Windows
-  option(BUILD_64BIT "Build 64bit binaries" ON)
-
-  if(BUILD_64BIT)
-      set(BITS "64")
-  endif()
-
   if (BITS STREQUAL 64)
     set( SYSTEM_ARCH "x86_64" )
   else()
     set( SYSTEM_ARCH "x86" )
   endif()
 endif()
-
-
-# Determine compiler
-if (UNIX) # Linux or OS X
-  execute_process(COMMAND ${CMAKE_CXX_COMPILER} -v
-      OUTPUT_VARIABLE COMPILER_INFO_OUT
-      ERROR_VARIABLE COMPILER_INFO_ERR
-      OUTPUT_STRIP_TRAILING_WHITESPACE)
-  string(REGEX MATCH clang|gcc COMPILER_NAME ${COMPILER_INFO_OUT} ${COMPILER_INFO_ERR})
-
-  if (COMPILER_NAME STREQUAL clang)
-    # set(BIIPS_COMPILE_FLAGS "-stdlib=libstdc++ -fPIC -Wno-redeclared-class-member -Wno-c++11-extensions")
-    set(BIIPS_COMPILE_FLAGS "-std=c++11 -stdlib=libstdc++ -fPIC -Wno-redeclared-class-member")
-    set(BIIPS_LINK_FLAGS "-stdlib=libstdc++")
-
-  elseif (COMPILER_NAME STREQUAL gcc)
-      # TODO : check if g++ version >= 4.7 or 4.8 ?
-    set(BIIPS_COMPILE_FLAGS "-std=c++11 -fPIC -Wno-unused-local-typedefs -Wno-deprecated-declarations")
-
-  else()
-    message(WARNING "FIXME: Could not determine compiler name")
-    set(BIIPS_COMPILE_FLAGS "-fPIC")
-  endif()
-
-elseif (WIN32) # Windows
-  set(BIIPS_COMPILE_FLAGS "-m${BITS}")
-  set(BIIPS_LINK_FLAGS "-m${BITS}")
-endif()
-
-set(BIIPS_COMPILE_FLAGS "${BIIPS_COMPILE_FLAGS}")
-
-add_definitions(${BIIPS_COMPILE_FLAGS})
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${BIIPS_LINK_FLAGS}")
-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${BIIPS_LINK_FLAGS}")
 
 
 if (FIND_OCTAVE)
@@ -80,18 +40,11 @@ else()
     if (NOT MATLAB)
       message(FATAL_ERROR "Matlab not found") 
     endif()
-    
-    if ( (${MATLAB_ARCH} STREQUAL x64) AND (BITS EQUAL 32) )
-        message(FATAL_ERROR "Can not build matbiips for 32bit. Matlab architecture is 64bit.")
-    elseif ( (${MATLAB_ARCH} STREQUAL i386) AND (BITS EQUAL 64) )
-        message(FATAL_ERROR "Can not build matbiips for 64bit. Matlab architecture is 32bit.")
-    endif ()
 endif()
 
 
 enable_testing()
 
-add_subdirectory(src)
 add_subdirectory(tests)
 add_subdirectory(doc)
 
